@@ -84,4 +84,9 @@ object Deps {
         }
     }
 
+    object Mockk {
+        const val VERSION = "1.12.4"
+        const val core = "io.mockk:mockk:$VERSION"
+    }
+
 }

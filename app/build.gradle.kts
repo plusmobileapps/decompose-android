@@ -73,6 +73,7 @@ dependencies {
     testImplementation(Deps.Badoo.Reaktive.reaktiveTesting)
 
     testImplementation("junit:junit:4.13.2")
+    testImplementation(Deps.Mockk.core)
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
