@@ -64,7 +64,6 @@ object Deps {
             const val mvikotlin = "com.arkivanov.mvikotlin:mvikotlin:$VERSION"
             const val mvikotlinMain = "com.arkivanov.mvikotlin:mvikotlin-main:$VERSION"
             const val mvikotlinLogging = "com.arkivanov.mvikotlin:mvikotlin-logging:$VERSION"
-            const val mvikotlinTimeTravel = "com.arkivanov.mvikotlin:mvikotlin-timetravel:$VERSION"
             const val mvikotlinExtensionsReaktive = "com.arkivanov.mvikotlin:mvikotlin-extensions-reaktive:$VERSION"
         }
 
