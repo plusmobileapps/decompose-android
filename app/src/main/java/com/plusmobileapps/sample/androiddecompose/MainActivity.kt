@@ -3,11 +3,10 @@ package com.plusmobileapps.sample.androiddecompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,7 +20,9 @@ import com.plusmobileapps.sample.androiddecompose.characters.CharactersBloc
 import com.plusmobileapps.sample.androiddecompose.root.RootBloc
 import com.plusmobileapps.sample.androiddecompose.root.RootBlocImpl
 import com.plusmobileapps.sample.androiddecompose.ui.theme.DecomposeAndroidSampleTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,5 +59,8 @@ fun RootUI(bloc: RootBloc) {
 fun CharactersUI(bloc: CharactersBloc) {
     val model = bloc.models.subscribeAsState()
 
-    Text(text = "Characters screen")
+    Column {
+        Text(text = "Query")
+        BasicTextField(value = model.value.query, onValueChange = bloc::onQueryChanged)
+    }
 }

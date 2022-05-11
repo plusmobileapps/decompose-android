@@ -49,6 +49,13 @@ object Deps {
         }
     }
 
+    object Hilt {
+        const val VERSION = "2.38.1"
+        const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$VERSION"
+        const val android = "com.google.dagger:hilt-android:$VERSION"
+        const val annotations = "com.google.dagger:hilt-android-compiler:$VERSION"
+    }
+
     object SqlDelight {
         const val VERSION = "1.5.3"
 

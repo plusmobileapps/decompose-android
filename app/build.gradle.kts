@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("kotlin-parcelize")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -67,10 +69,15 @@ dependencies {
     implementation(Deps.ArkIvanov.Decompose.decompose)
     implementation(Deps.ArkIvanov.Decompose.extensionsCompose)
 
+    // reaktive
     implementation(Deps.Badoo.Reaktive.reaktive)
     implementation(Deps.Badoo.Reaktive.utils)
     implementation(Deps.Badoo.Reaktive.coroutinesInterop)
     testImplementation(Deps.Badoo.Reaktive.reaktiveTesting)
+
+    // hilt DI
+    implementation(Deps.Hilt.android)
+    kapt(Deps.Hilt.annotations)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
@@ -83,6 +90,14 @@ dependencies {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        freeCompilerArgs += "-opt-in=com.arkivanov.mvikotlin.core.utils.ExperimentalMviKotlinApi"
+        freeCompilerArgs += listOf(
+            "-opt-in=com.arkivanov.mvikotlin.core.utils.ExperimentalMviKotlinApi",
+            "-opt-in=com.arkivanov.decompose.ExperimentalDecomposeApi"
+        )
     }
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
