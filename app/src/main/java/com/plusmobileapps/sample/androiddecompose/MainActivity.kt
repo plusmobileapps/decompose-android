@@ -18,6 +18,7 @@ import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersBloc
+import com.plusmobileapps.sample.androiddecompose.di.ServiceLocator
 import com.plusmobileapps.sample.androiddecompose.root.RootBloc
 import com.plusmobileapps.sample.androiddecompose.root.RootBlocImpl
 import com.plusmobileapps.sample.androiddecompose.ui.theme.DecomposeAndroidSampleTheme
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
     private fun buildRoot(componentContext: ComponentContext): RootBloc = RootBlocImpl(
         componentContext = componentContext,
-        storeFactory = LoggingStoreFactory(DefaultStoreFactory())
+        di = ServiceLocator
     )
 }
 

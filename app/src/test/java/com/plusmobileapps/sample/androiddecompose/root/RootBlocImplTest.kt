@@ -3,7 +3,6 @@ package com.plusmobileapps.sample.androiddecompose.root
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
-import com.badoo.reaktive.base.Consumer
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersBloc
 import io.mockk.mockk
 import org.junit.Assert.*
@@ -17,7 +16,7 @@ class RootBlocImplTest {
     private lateinit var bloc: RootBloc
 
     private val charactersBloc: CharactersBloc = mockk()
-    private lateinit var charactersOutput: Consumer<CharactersBloc.Output>
+    private lateinit var charactersOutput: (CharactersBloc.Output) -> Unit
 
     @Before
     fun setUp() {

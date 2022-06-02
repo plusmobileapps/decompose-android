@@ -4,13 +4,12 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
-import com.badoo.reaktive.scheduler.overrideSchedulers
-import com.badoo.reaktive.subject.publish.PublishSubject
-import com.badoo.reaktive.test.observable.assertValue
-import com.badoo.reaktive.test.observable.test
-import com.badoo.reaktive.test.scheduler.TestScheduler
-import com.plusmobileapps.sample.androiddecompose.utils.consumer
-import org.junit.Assert.*
+import com.plusmobileapps.sample.androiddecompose.util.TestDispatchers
+import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -20,15 +19,15 @@ class CharactersBlocImplTest {
 
     private val lifecycle = LifecycleRegistry().apply { resume() }
 
-    private val outputSubject = PublishSubject<CharactersBloc.Output>()
-    private val output = outputSubject.test()
+    private val output: (CharactersBloc.Output) -> Unit = mockk(relaxed = true)
+
+    private val dispatchers = TestDispatchers()
 
     @Before
     fun setUp() {
-        overrideSchedulers(main = { TestScheduler() }, io = { TestScheduler() })
-
         bloc = CharactersBlocImpl(
             componentContext = DefaultComponentContext(lifecycle),
+            dispatchers = dispatchers,
             storeFactory = DefaultStoreFactory(),
             output = output
         )
@@ -60,6 +59,6 @@ class CharactersBlocImplTest {
 
         bloc.onCharacterClicked(expected)
 
-        output.assertValue(CharactersBloc.Output.OpenCharacter(expected))
+        verify { output.invoke(CharactersBloc.Output.OpenCharacter(expected)) }
     }
 }

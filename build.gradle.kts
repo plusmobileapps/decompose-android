@@ -7,8 +7,6 @@ buildscript {
     dependencies {
         classpath(Deps.Jetbrains.kotlinGradlePlugin)
         classpath(Deps.Android.androidGradlePlugin)
-        classpath(Deps.SqlDelight.gradlePlugin)
-        classpath(kotlin("serialization", version = Deps.Jetbrains.KOTLIN_VERSION))
     }
 
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.

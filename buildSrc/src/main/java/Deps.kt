@@ -4,8 +4,6 @@ object Deps {
         const val COROUTINES_VERSION = "1.6.0"
 
         const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
-        const val kotlinxSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0"
-        const val dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.2.0"
 
         const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION"
         const val coroutinesTesting = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$COROUTINES_VERSION"
@@ -14,8 +12,6 @@ object Deps {
 
     object Android {
         const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.2"
-        const val materialDesign = "com.google.android.material:material:1.3.0"
-        const val appCompat = "androidx.appcompat:appcompat:1.3.0"
 
         object Ktx {
             const val core = "androidx.core:core-ktx:1.7.0"
@@ -42,19 +38,6 @@ object Deps {
 
 
         }
-
-        object Accompanist {
-            const val VERSION = "0.19.0"
-            const val flowLayouts = "com.google.accompanist:accompanist-flowlayout:$VERSION"
-        }
-    }
-
-    object SqlDelight {
-        const val VERSION = "1.5.3"
-
-        const val gradlePlugin = "com.squareup.sqldelight:gradle-plugin:$VERSION"
-        const val androidDriver = "com.squareup.sqldelight:android-driver:$VERSION"
-        const val nativeDriver = "com.squareup.sqldelight:native-driver:$VERSION"
     }
 
     object ArkIvanov {
@@ -64,23 +47,13 @@ object Deps {
             const val mvikotlin = "com.arkivanov.mvikotlin:mvikotlin:$VERSION"
             const val mvikotlinMain = "com.arkivanov.mvikotlin:mvikotlin-main:$VERSION"
             const val mvikotlinLogging = "com.arkivanov.mvikotlin:mvikotlin-logging:$VERSION"
-            const val mvikotlinExtensionsReaktive = "com.arkivanov.mvikotlin:mvikotlin-extensions-reaktive:$VERSION"
+            const val mvikotlinExtensionsCoroutines = "com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:$VERSION"
         }
 
         object Decompose {
             private const val VERSION = "0.6.0"
             const val decompose = "com.arkivanov.decompose:decompose:$VERSION"
             const val extensionsCompose = "com.arkivanov.decompose:extensions-compose-jetpack:$VERSION"
-        }
-    }
-
-    object Badoo {
-        object Reaktive {
-            private const val VERSION = "1.2.1"
-            const val reaktive = "com.badoo.reaktive:reaktive:$VERSION"
-            const val reaktiveTesting = "com.badoo.reaktive:reaktive-testing:$VERSION"
-            const val utils = "com.badoo.reaktive:utils:$VERSION"
-            const val coroutinesInterop = "com.badoo.reaktive:coroutines-interop:$VERSION"
         }
     }
 

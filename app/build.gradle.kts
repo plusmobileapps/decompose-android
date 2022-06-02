@@ -47,6 +47,9 @@ android {
 
 dependencies {
 
+    implementation(Deps.Jetbrains.coroutines)
+    implementation(Deps.Android.coil)
+
     // compose
     implementation(Deps.Android.Compose.ui)
     implementation(Deps.Android.Compose.foundation)
@@ -63,17 +66,13 @@ dependencies {
     implementation(Deps.ArkIvanov.MVIKotlin.mvikotlinMain)
     implementation(Deps.ArkIvanov.MVIKotlin.rx)
     implementation(Deps.ArkIvanov.MVIKotlin.mvikotlinLogging)
-    implementation(Deps.ArkIvanov.MVIKotlin.mvikotlinExtensionsReaktive)
+    implementation(Deps.ArkIvanov.MVIKotlin.mvikotlinExtensionsCoroutines)
     implementation(Deps.ArkIvanov.Decompose.decompose)
     implementation(Deps.ArkIvanov.Decompose.extensionsCompose)
 
-    implementation(Deps.Badoo.Reaktive.reaktive)
-    implementation(Deps.Badoo.Reaktive.utils)
-    implementation(Deps.Badoo.Reaktive.coroutinesInterop)
-    testImplementation(Deps.Badoo.Reaktive.reaktiveTesting)
-
     testImplementation("junit:junit:4.13.2")
     testImplementation(Deps.Mockk.core)
+    testImplementation(Deps.Jetbrains.coroutinesTesting)
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
@@ -84,6 +83,11 @@ dependencies {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        freeCompilerArgs += "-opt-in=com.arkivanov.mvikotlin.core.utils.ExperimentalMviKotlinApi"
+        freeCompilerArgs += arrayOf(
+            "-opt-in=com.arkivanov.mvikotlin.core.utils.ExperimentalMviKotlinApi",
+            "-opt-in=com.arkivanov.decompose.ExperimentalDecomposeApi",
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+        )
+
     }
 }
