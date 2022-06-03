@@ -95,7 +95,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         freeCompilerArgs += arrayOf(
             "-opt-in=com.arkivanov.mvikotlin.core.utils.ExperimentalMviKotlinApi",
             "-opt-in=com.arkivanov.decompose.ExperimentalDecomposeApi",
-            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
         )
 
     }

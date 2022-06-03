@@ -6,19 +6,19 @@ import com.arkivanov.decompose.router.router
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
-import com.plusmobileapps.sample.androiddecompose.characters.CharactersBloc
-import com.plusmobileapps.sample.androiddecompose.characters.CharactersBlocImpl
+import com.plusmobileapps.sample.androiddecompose.bottomnav.BottomNavBloc
+import com.plusmobileapps.sample.androiddecompose.bottomnav.BottomNavBlocImpl
 import com.plusmobileapps.sample.androiddecompose.di.DI
 
 class RootBlocImpl(
     componentContext: ComponentContext,
-    private val characters: (ComponentContext, (CharactersBloc.Output) -> Unit) -> CharactersBloc,
+    private val bottomNav: (ComponentContext, (BottomNavBloc.Output) -> Unit) -> BottomNavBloc,
 ) : RootBloc, ComponentContext by componentContext {
 
-    constructor(componentContext: ComponentContext, di: DI): this(
+    constructor(componentContext: ComponentContext, di: DI) : this(
         componentContext = componentContext,
-        characters = { context, output ->
-            CharactersBlocImpl(
+        bottomNav = { context, output ->
+            BottomNavBlocImpl(
                 componentContext = context,
                 di = di,
                 output = output
@@ -27,27 +27,32 @@ class RootBlocImpl(
     )
 
     private val router = router<Configuration, RootBloc.Child>(
-        initialConfiguration = Configuration.Characters,
+        initialConfiguration = Configuration.BottomNav,
         handleBackButton = true,
         childFactory = ::createChild,
         key = "RootRouter"
     )
     override val routerState: Value<RouterState<*, RootBloc.Child>> = router.state
 
-    private fun createChild(configuration: Configuration, context: ComponentContext): RootBloc.Child {
+    private fun createChild(
+        configuration: Configuration,
+        context: ComponentContext
+    ): RootBloc.Child {
         return when (configuration) {
-            Configuration.Characters -> RootBloc.Child.Characters(characters(context, this::onCharactersOutput))
+            Configuration.BottomNav -> RootBloc.Child.BottomNav(
+                bottomNav(context, this::onCharactersOutput)
+            )
         }
     }
 
-    private fun onCharactersOutput(output: CharactersBloc.Output) {
+    private fun onCharactersOutput(output: BottomNavBloc.Output) {
         when (output) {
-            is CharactersBloc.Output.OpenCharacter -> TODO("router.push() character detail page")
+            is BottomNavBloc.Output.ShowCharacter -> TODO()
         }
     }
 
     private sealed class Configuration : Parcelable {
         @Parcelize
-        object Characters : Configuration()
+        object BottomNav : Configuration()
     }
 }

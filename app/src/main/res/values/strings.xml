@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Decompose Android Sample</string>
+    <string name="app_name">Rick And Morty Decompose</string>
+
+    <string name="bottom_nav_characters">Characters</string>
+    <string name="bottom_nav_episodes">Episodes</string>
+
 </resources>
