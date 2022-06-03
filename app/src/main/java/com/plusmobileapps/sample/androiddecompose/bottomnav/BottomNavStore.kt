@@ -9,7 +9,7 @@ interface BottomNavigationStore :
     Store<BottomNavigationStore.Intent, BottomNavigationStore.State, Nothing> {
 
     sealed class Intent {
-        data class SelectNavItem(val navItem: NavItem) : Intent()
+        data class SelectNavItem(val type: NavItem.Type) : Intent()
     }
 
     data class State(

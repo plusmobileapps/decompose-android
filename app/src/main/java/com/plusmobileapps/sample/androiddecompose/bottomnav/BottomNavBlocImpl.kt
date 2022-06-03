@@ -7,6 +7,8 @@ import com.arkivanov.decompose.router.pop
 import com.arkivanov.decompose.router.router
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
+import com.arkivanov.essenty.lifecycle.doOnPause
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
@@ -26,7 +28,11 @@ class BottomNavBlocImpl(
     private val output: (BottomNavBloc.Output) -> Unit
 ) : BottomNavBloc, ComponentContext by componentContext {
 
-    constructor(componentContext: ComponentContext, di: DI, output: (BottomNavBloc.Output) -> Unit) : this(
+    constructor(
+        componentContext: ComponentContext,
+        di: DI,
+        output: (BottomNavBloc.Output) -> Unit
+    ) : this(
         componentContext = componentContext,
         storeFactory = di.storeFactory,
         dispatchers = di.dispatchers,
@@ -57,25 +63,55 @@ class BottomNavBlocImpl(
         BottomNavBloc.Model(it.navItems)
     }
 
+    private val routerSubscriber: (RouterState<Configuration, BottomNavBloc.Child>) -> Unit = {
+        store.accept(
+            BottomNavigationStore.Intent.SelectNavItem(
+                when (it.activeChild.instance) {
+                    is BottomNavBloc.Child.Characters -> BottomNavBloc.NavItem.Type.CHARACTERS
+                    is BottomNavBloc.Child.Episodes -> BottomNavBloc.NavItem.Type.EPISODES
+                }
+            )
+        )
+    }
+
+    init {
+        lifecycle.doOnResume {
+            router.state.subscribe(routerSubscriber)
+        }
+        lifecycle.doOnPause {
+            router.state.unsubscribe(routerSubscriber)
+        }
+    }
+
     override fun onNavItemClicked(item: BottomNavBloc.NavItem) {
-        store.accept(BottomNavigationStore.Intent.SelectNavItem(item))
-        router.bringToFront(when (item.type) {
-            BottomNavBloc.NavItem.Type.CHARACTERS -> Configuration.Characters
-            BottomNavBloc.NavItem.Type.EPISODES -> Configuration.Episodes
-        })
+        router.bringToFront(
+            when (item.type) {
+                BottomNavBloc.NavItem.Type.CHARACTERS -> Configuration.Characters
+                BottomNavBloc.NavItem.Type.EPISODES -> Configuration.Episodes
+            }
+        )
     }
 
     private fun createChild(
         configuration: Configuration,
         context: ComponentContext
     ): BottomNavBloc.Child = when (configuration) {
-        Configuration.Characters -> BottomNavBloc.Child.Characters(charactersBloc(context, this::onCharactersBlocOutput))
+        Configuration.Characters -> BottomNavBloc.Child.Characters(
+            charactersBloc(
+                context,
+                this::onCharactersBlocOutput
+            )
+        )
         Configuration.Episodes -> BottomNavBloc.Child.Episodes(object : EpisodesBloc {}) // TODO
     }
 
     private fun onCharactersBlocOutput(output: CharactersBloc.Output) {
-        when(output) {
-            is CharactersBloc.Output.OpenCharacter -> this.output(BottomNavBloc.Output.ShowCharacter(output.character.id))
+        when (output) {
+            is CharactersBloc.Output.OpenCharacter -> this.output(
+                BottomNavBloc.Output.ShowCharacter(
+                    output.character.id
+                )
+            )
         }
     }
 

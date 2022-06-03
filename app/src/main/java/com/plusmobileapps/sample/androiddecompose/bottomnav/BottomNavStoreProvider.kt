@@ -36,7 +36,7 @@ class BottomNavStoreProvider(private val storeFactory: StoreFactory, private val
 
         override fun executeIntent(intent: Intent, getState: () -> State) =
             when (intent) {
-                is Intent.SelectNavItem -> selectNavItem(intent.navItem.type, getState())
+                is Intent.SelectNavItem -> selectNavItem(intent.type, getState())
             }
 
         private fun selectNavItem(type: NavItem.Type, state: State) {
