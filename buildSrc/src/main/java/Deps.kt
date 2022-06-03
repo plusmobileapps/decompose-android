@@ -57,6 +57,14 @@ object Deps {
         }
     }
 
+    object Square {
+        object Retrofit {
+            const val VERSION = "2.9.0"
+            const val core = "com.squareup.retrofit2:retrofit:$VERSION"
+            const val gson = "com.squareup.retrofit2:converter-gson:$VERSION"
+        }
+    }
+
     object Mockk {
         const val VERSION = "1.12.4"
         const val core = "io.mockk:mockk:$VERSION"

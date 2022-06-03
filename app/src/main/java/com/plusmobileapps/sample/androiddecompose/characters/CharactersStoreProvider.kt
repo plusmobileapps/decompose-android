@@ -1,5 +1,6 @@
 package com.plusmobileapps.sample.androiddecompose.characters
 
+import android.util.Log
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -7,15 +8,19 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersStore.Intent
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersStore.State
+import com.plusmobileapps.sample.androiddecompose.data.CharactersRepository
+import com.plusmobileapps.sample.androiddecompose.data.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
+import kotlinx.coroutines.launch
 
 class CharactersStoreProvider(
     private val storeFactory: StoreFactory,
-    private val dispatchers: Dispatchers
+    private val dispatchers: Dispatchers,
+    private val repository: CharactersRepository
 ) {
 
     private sealed class Message {
-        data class CharactersUpdated(val characters: List<Character>) : Message()
+        data class CharactersUpdated(val characters: List<RickAndMortyCharacter>) : Message()
         data class QueryUpdated(val query: String) : Message()
         object Loading : Message()
     }
@@ -33,6 +38,14 @@ class CharactersStoreProvider(
         CoroutineExecutor<Intent, Unit, State, Message, Nothing>(dispatchers.main) {
 
         override fun executeAction(action: Unit, getState: () -> State) {
+            scope.launch {
+                try {
+                    val characters = repository.getCharacters()
+                    dispatch(Message.CharactersUpdated(characters))
+                } catch (e: Exception) {
+                    Log.e("CharactersStore", "COuldn't fetch characters", e)
+                }
+            }
         }
 
         override fun executeIntent(intent: Intent, getState: () -> State) {

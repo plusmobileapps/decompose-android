@@ -4,11 +4,10 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.plusmobileapps.sample.androiddecompose.data.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.util.TestDispatchers
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -55,7 +54,7 @@ class CharactersBlocImplTest {
 
     @Test
     fun `on character clicked should emit output of that character`() {
-        val expected = Character(1L, "some name", "")
+        val expected = RickAndMortyCharacter(1L, "some name", "")
 
         bloc.onCharacterClicked(expected)
 

@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -18,6 +20,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField(
+            "String",
+            "API_KEY",
+            gradleLocalProperties(rootDir).getProperty("API_KEY")
+        )
     }
 
     buildTypes {
@@ -49,6 +56,8 @@ dependencies {
 
     implementation(Deps.Jetbrains.coroutines)
     implementation(Deps.Android.coil)
+    implementation(Deps.Square.Retrofit.core)
+    implementation(Deps.Square.Retrofit.gson)
 
     // compose
     implementation(Deps.Android.Compose.ui)

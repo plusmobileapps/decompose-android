@@ -5,6 +5,8 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.plusmobileapps.sample.androiddecompose.data.CharactersRepository
+import com.plusmobileapps.sample.androiddecompose.data.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.di.DI
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
 import com.plusmobileapps.sample.androiddecompose.utils.asValue
@@ -13,6 +15,7 @@ class CharactersBlocImpl(
     componentContext: ComponentContext,
     storeFactory: StoreFactory,
     dispatchers: Dispatchers,
+    repository: CharactersRepository,
     private val output: (CharactersBloc.Output) -> Unit
 ) : CharactersBloc, ComponentContext by componentContext {
 
@@ -24,11 +27,12 @@ class CharactersBlocImpl(
         componentContext = componentContext,
         storeFactory = di.storeFactory,
         dispatchers = di.dispatchers,
+        repository = di.repository,
         output = output
     )
 
     private val store = instanceKeeper.getStore {
-        CharactersStoreProvider(storeFactory, dispatchers).provide()
+        CharactersStoreProvider(storeFactory, dispatchers, repository).provide()
     }
 
     override val models: Value<CharactersBloc.Model> = store.asValue().map { state ->
@@ -40,7 +44,7 @@ class CharactersBlocImpl(
         )
     }
 
-    override fun onCharacterClicked(character: Character) {
+    override fun onCharacterClicked(character: RickAndMortyCharacter) {
         output(CharactersBloc.Output.OpenCharacter(character))
     }
 

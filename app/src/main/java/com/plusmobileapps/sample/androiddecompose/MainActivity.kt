@@ -3,21 +3,23 @@ package com.plusmobileapps.sample.androiddecompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import coil.compose.AsyncImage
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.defaultComponentContext
 import com.arkivanov.decompose.extensions.compose.jetpack.Children
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
-import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
-import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersBloc
+import com.plusmobileapps.sample.androiddecompose.data.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.di.ServiceLocator
 import com.plusmobileapps.sample.androiddecompose.root.RootBloc
 import com.plusmobileapps.sample.androiddecompose.root.RootBlocImpl
@@ -58,6 +60,20 @@ fun RootUI(bloc: RootBloc) {
 @Composable
 fun CharactersUI(bloc: CharactersBloc) {
     val model = bloc.models.subscribeAsState()
+    val characters = model.value.characters
 
-    Text(text = "Characters screen")
+    LazyColumn {
+        items(characters) {
+            CharacterListItem(character = it)
+        }
+    }
+
+}
+
+@Composable
+fun CharacterListItem(character: RickAndMortyCharacter) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        AsyncImage(model = character.imageUrl, contentDescription = null)
+        Text(text = character.name)
+    }
 }

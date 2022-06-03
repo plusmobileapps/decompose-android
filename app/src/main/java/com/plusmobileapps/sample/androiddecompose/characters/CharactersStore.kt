@@ -2,6 +2,7 @@ package com.plusmobileapps.sample.androiddecompose.characters
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersStore.*
+import com.plusmobileapps.sample.androiddecompose.data.RickAndMortyCharacter
 
 interface CharactersStore : Store<Intent, State, Nothing> {
 
@@ -12,7 +13,7 @@ interface CharactersStore : Store<Intent, State, Nothing> {
 
     data class State(
         val query: String = "",
-        val characters: List<Character> = emptyList(),
+        val characters: List<RickAndMortyCharacter> = emptyList(),
         val error: String? = null,
         val isLoading: Boolean = false
     )
