@@ -9,11 +9,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
@@ -30,6 +32,7 @@ import com.plusmobileapps.sample.androiddecompose.di.ServiceLocator
 import com.plusmobileapps.sample.androiddecompose.root.RootBloc
 import com.plusmobileapps.sample.androiddecompose.root.RootBlocImpl
 import com.plusmobileapps.sample.androiddecompose.ui.theme.DecomposeAndroidSampleTheme
+import com.plusmobileapps.sample.androiddecompose.ui.theme.Typography
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,11 +118,17 @@ fun CharactersUI(bloc: CharactersBloc, paddingValues: PaddingValues) {
 
 @Composable
 fun CharacterListItem(character: RickAndMortyCharacter, onClick: () -> Unit) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .clickable { onClick() }) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         AsyncImage(model = character.imageUrl, contentDescription = null)
-        Text(text = character.name)
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(modifier = Modifier.weight(1f), text = character.name, style = Typography.titleMedium)
+        Icon(Icons.Default.ArrowForward, modifier = Modifier.padding(16.dp), contentDescription = null)
     }
 }
 
@@ -132,7 +141,7 @@ fun CharacterDetailUI(bloc: CharacterBloc) {
             SmallTopAppBar(
                 title = { Text(text = stringResource(R.string.character_detail_title)) },
                 navigationIcon = {
-                    IconButton(onClick = bloc::onBackClicked,) {
+                    IconButton(onClick = bloc::onBackClicked) {
                         Icon(
                             Icons.Default.ArrowBack,
                             contentDescription = stringResource(R.string.back)
@@ -142,7 +151,10 @@ fun CharacterDetailUI(bloc: CharacterBloc) {
             )
         }
     ) {
-        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             AsyncImage(model = state.image, contentDescription = null)
             Text(state.name)
         }
