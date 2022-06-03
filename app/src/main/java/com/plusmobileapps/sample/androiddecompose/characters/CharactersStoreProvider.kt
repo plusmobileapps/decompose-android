@@ -26,7 +26,7 @@ class CharactersStoreProvider(
     }
 
     fun provide(): CharactersStore = object : CharactersStore,
-        Store<Intent, State, Nothing> by storeFactory.create<Intent, Unit, Message, State, Nothing>(
+        Store<Intent, State, Nothing> by storeFactory.create(
             name = "CharactersStore",
             initialState = State(),
             bootstrapper = SimpleBootstrapper(Unit),

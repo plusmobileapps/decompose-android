@@ -4,13 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
@@ -19,8 +20,10 @@ import coil.compose.rememberImagePainter
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.defaultComponentContext
 import com.arkivanov.decompose.extensions.compose.jetpack.Children
+import com.arkivanov.decompose.extensions.compose.jetpack.animation.child.*
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.plusmobileapps.sample.androiddecompose.bottomnav.BottomNavBloc
+import com.plusmobileapps.sample.androiddecompose.character.CharacterBloc
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersBloc
 import com.plusmobileapps.sample.androiddecompose.data.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.di.ServiceLocator
@@ -53,9 +56,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun RootUI(bloc: RootBloc) {
-    Children(routerState = bloc.routerState) {
+    Children(routerState = bloc.routerState, animation = childAnimation(slide())) {
         when (val child = it.instance) {
             is RootBloc.Child.BottomNav -> BottomNavUI(bloc = child.bloc)
+            is RootBloc.Child.Character -> CharacterDetailUI(bloc = child.bloc)
         }
     }
 }
@@ -64,10 +68,10 @@ fun RootUI(bloc: RootBloc) {
 fun BottomNavUI(bloc: BottomNavBloc) {
     Scaffold(bottomBar = {
         BottomNavigationBar(bloc = bloc)
-    }) {
-        Children(routerState = bloc.routerState) {
+    }) { paddingValues ->
+        Children(routerState = bloc.routerState, animation = childAnimation(fade() + scale())) {
             when (val child = it.instance) {
-                is BottomNavBloc.Child.Characters -> CharactersUI(bloc = child.bloc)
+                is BottomNavBloc.Child.Characters -> CharactersUI(bloc = child.bloc, paddingValues)
                 is BottomNavBloc.Child.Episodes -> Text("Episodes")
             }
         }
@@ -97,11 +101,11 @@ fun BottomNavigationBar(bloc: BottomNavBloc) {
 
 
 @Composable
-fun CharactersUI(bloc: CharactersBloc) {
+fun CharactersUI(bloc: CharactersBloc, paddingValues: PaddingValues) {
     val model = bloc.models.subscribeAsState()
     val characters = model.value.characters
 
-    LazyColumn {
+    LazyColumn(modifier = Modifier.padding(paddingValues)) {
         items(characters) {
             CharacterListItem(character = it) { bloc.onCharacterClicked(it) }
         }
@@ -116,5 +120,31 @@ fun CharacterListItem(character: RickAndMortyCharacter, onClick: () -> Unit) {
         .clickable { onClick() }) {
         AsyncImage(model = character.imageUrl, contentDescription = null)
         Text(text = character.name)
+    }
+}
+
+@Composable
+fun CharacterDetailUI(bloc: CharacterBloc) {
+    val model = bloc.models.subscribeAsState()
+    val state = model.value
+    Scaffold(
+        topBar = {
+            SmallTopAppBar(
+                title = { Text(text = stringResource(R.string.character_detail_title)) },
+                navigationIcon = {
+                    IconButton(onClick = bloc::onBackClicked,) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                }
+            )
+        }
+    ) {
+        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+            AsyncImage(model = state.image, contentDescription = null)
+            Text(state.name)
+        }
     }
 }

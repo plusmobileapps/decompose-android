@@ -3,5 +3,7 @@
 
     <string name="bottom_nav_characters">Characters</string>
     <string name="bottom_nav_episodes">Episodes</string>
+    <string name="character_detail_title">Character Detail</string>
+    <string name="back">Back</string>
 
 </resources>
