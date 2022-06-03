@@ -3,6 +3,7 @@ package com.plusmobileapps.sample.androiddecompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -67,7 +68,7 @@ fun BottomNavUI(bloc: BottomNavBloc) {
         Children(routerState = bloc.routerState) {
             when (val child = it.instance) {
                 is BottomNavBloc.Child.Characters -> CharactersUI(bloc = child.bloc)
-                is BottomNavBloc.Child.Episodes -> TODO()
+                is BottomNavBloc.Child.Episodes -> Text("Episodes")
             }
         }
     }
@@ -102,15 +103,17 @@ fun CharactersUI(bloc: CharactersBloc) {
 
     LazyColumn {
         items(characters) {
-            CharacterListItem(character = it)
+            CharacterListItem(character = it) { bloc.onCharacterClicked(it) }
         }
     }
 
 }
 
 @Composable
-fun CharacterListItem(character: RickAndMortyCharacter) {
-    Row(modifier = Modifier.fillMaxWidth()) {
+fun CharacterListItem(character: RickAndMortyCharacter, onClick: () -> Unit) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .clickable { onClick() }) {
         AsyncImage(model = character.imageUrl, contentDescription = null)
         Text(text = character.name)
     }

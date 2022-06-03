@@ -2,6 +2,8 @@ package com.plusmobileapps.sample.androiddecompose.bottomnav
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.RouterState
+import com.arkivanov.decompose.router.bringToFront
+import com.arkivanov.decompose.router.pop
 import com.arkivanov.decompose.router.router
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
@@ -12,6 +14,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersBloc
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersBlocImpl
 import com.plusmobileapps.sample.androiddecompose.di.DI
+import com.plusmobileapps.sample.androiddecompose.episodes.EpisodesBloc
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
 import com.plusmobileapps.sample.androiddecompose.utils.asValue
 
@@ -27,11 +30,11 @@ class BottomNavBlocImpl(
         componentContext = componentContext,
         storeFactory = di.storeFactory,
         dispatchers = di.dispatchers,
-        charactersBloc = { context, output ->
+        charactersBloc = { context, characterOutput ->
             CharactersBlocImpl(
                 componentContext = context,
                 di = di,
-                output = output
+                output = characterOutput
             )
         },
         output = output
@@ -56,6 +59,10 @@ class BottomNavBlocImpl(
 
     override fun onNavItemClicked(item: BottomNavBloc.NavItem) {
         store.accept(BottomNavigationStore.Intent.SelectNavItem(item))
+        router.bringToFront(when (item.type) {
+            BottomNavBloc.NavItem.Type.CHARACTERS -> Configuration.Characters
+            BottomNavBloc.NavItem.Type.EPISODES -> Configuration.Episodes
+        })
     }
 
     private fun createChild(
@@ -63,7 +70,7 @@ class BottomNavBlocImpl(
         context: ComponentContext
     ): BottomNavBloc.Child = when (configuration) {
         Configuration.Characters -> BottomNavBloc.Child.Characters(charactersBloc(context, this::onCharactersBlocOutput))
-        Configuration.Episodes -> TODO()
+        Configuration.Episodes -> BottomNavBloc.Child.Episodes(object : EpisodesBloc {}) // TODO
     }
 
     private fun onCharactersBlocOutput(output: CharactersBloc.Output) {
