@@ -19,7 +19,7 @@ import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersBloc
-import com.plusmobileapps.sample.androiddecompose.data.RickAndMortyCharacter
+import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.ui.theme.DecomposeAndroidSampleTheme
 import com.plusmobileapps.sample.androiddecompose.ui.theme.Typography
 

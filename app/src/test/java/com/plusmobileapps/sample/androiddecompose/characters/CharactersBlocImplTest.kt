@@ -4,7 +4,7 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
-import com.plusmobileapps.sample.androiddecompose.data.RickAndMortyCharacter
+import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.util.TestDispatchers
 import io.mockk.mockk
 import io.mockk.verify

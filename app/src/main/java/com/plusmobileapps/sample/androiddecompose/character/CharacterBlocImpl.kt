@@ -5,7 +5,7 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.plusmobileapps.sample.androiddecompose.data.CharactersRepository
+import com.plusmobileapps.sample.androiddecompose.data.characters.CharactersRepository
 import com.plusmobileapps.sample.androiddecompose.di.DI
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
 import com.plusmobileapps.sample.androiddecompose.utils.asValue
@@ -28,7 +28,7 @@ class CharacterBlocImpl(
         componentContext = context,
         storeFactory = di.storeFactory,
         dispatchers = di.dispatchers,
-        repository = di.repository,
+        repository = di.charactersRepository,
         id = id,
         output = output
     )

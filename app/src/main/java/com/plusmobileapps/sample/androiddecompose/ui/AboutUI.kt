@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,29 +28,35 @@ import com.plusmobileapps.sample.androiddecompose.ui.theme.Typography
 fun AboutUI() {
     val context = LocalContext.current
     val annotatedString = buildAnnotatedString {
-        append("This is an Android sample showcasing ")
+        withStyle(style = SpanStyle(MaterialTheme.colorScheme.onSurface)) {
+            append("This is an Android sample showcasing ")
+        }
 
         pushStringAnnotation("decompose", annotation = "https://github.com/arkivanov/Decompose")
-        withStyle(style = SpanStyle(Color.Blue)) {
+        withStyle(style = SpanStyle(MaterialTheme.colorScheme.primary)) {
             append("Decompose")
         }
         pop()
 
-        append(" and ")
+        withStyle(style = SpanStyle(MaterialTheme.colorScheme.onSurface)) {
+            append(" and ")
+        }
 
         pushStringAnnotation("mvikotlin", annotation = "https://github.com/arkivanov/MVIKotlin")
-        withStyle(style = SpanStyle(Color.Blue)) {
+        withStyle(style = SpanStyle(MaterialTheme.colorScheme.primary)) {
             append("MVIKotlin")
         }
         pop()
 
-        append(" with data being supplied by the ")
+        withStyle(style = SpanStyle(MaterialTheme.colorScheme.onSurface)) {
+            append(" with data being supplied by the ")
+        }
 
         pushStringAnnotation(
             "rickandmorty",
             annotation = "https://rickandmortyapi.com/documentation/#restl"
         )
-        withStyle(style = SpanStyle(Color.Blue)) {
+        withStyle(style = SpanStyle(MaterialTheme.colorScheme.primary)) {
             append("Rick and Morty API.")
         }
         pop()

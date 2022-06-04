@@ -1,43 +1,46 @@
-package com.plusmobileapps.sample.androiddecompose.character
+package com.plusmobileapps.sample.androiddecompose.episodes
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.plusmobileapps.sample.androiddecompose.character.CharacterStore.State
-import com.plusmobileapps.sample.androiddecompose.data.characters.CharactersRepository
-import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
+import com.plusmobileapps.sample.androiddecompose.data.episodes.Episode
+import com.plusmobileapps.sample.androiddecompose.data.episodes.EpisodeRepository
+import com.plusmobileapps.sample.androiddecompose.episodes.EpisodesStore.State
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
 import kotlinx.coroutines.launch
 
-class CharacterStoreProvider(
+class EpisodesStoreProvider(
     private val storeFactory: StoreFactory,
     private val dispatchers: Dispatchers,
-    private val repository: CharactersRepository,
-    private val id: Int
+    private val repository: EpisodeRepository
 ) {
 
     private sealed class Message {
-        data class CharacterUpdated(val character: RickAndMortyCharacter) : Message()
+        data class EpisodesUpdated(val episodes: List<Episode>) : Message()
+        data class Error(val error: String) : Message()
     }
 
-    fun create(): CharacterStore = object : CharacterStore,
+    fun create(): EpisodesStore = object : EpisodesStore,
         Store<Nothing, State, Nothing> by storeFactory.create(
-            name = "CharacterStore",
+            name = "EpisodesStore",
             initialState = State(),
             bootstrapper = SimpleBootstrapper(Unit),
             executorFactory = ::ExecutorImpl,
             reducer = ReducerImpl
-        ) {
-    }
+        ) {}
 
     private inner class ExecutorImpl :
         CoroutineExecutor<Nothing, Unit, State, Message, Nothing>(dispatchers.main) {
         override fun executeAction(action: Unit, getState: () -> State) {
             scope.launch {
-                val character = repository.getCharacter(id)
-                dispatch(Message.CharacterUpdated(character))
+                try {
+                    val episodes = repository.getEpisodes()
+                    dispatch(Message.EpisodesUpdated(episodes))
+                } catch (e: Exception) {
+                    dispatch(Message.Error(e.message.toString()))
+                }
             }
         }
     }
@@ -45,15 +48,8 @@ class CharacterStoreProvider(
     private object ReducerImpl : Reducer<State, Message> {
         override fun State.reduce(msg: Message): State =
             when (msg) {
-                is Message.CharacterUpdated -> State(
-                    isLoading = false,
-                    id = msg.character.id,
-                    name = msg.character.name,
-                    image = msg.character.imageUrl,
-                    status = msg.character.status,
-                    species = msg.character.species
-                )
+                is Message.EpisodesUpdated -> State(isLoading = false, episodes = msg.episodes)
+                is Message.Error -> State(isLoading = false, error = msg.error)
             }
     }
-
 }

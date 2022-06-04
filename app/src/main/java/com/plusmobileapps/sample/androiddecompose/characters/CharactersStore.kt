@@ -2,7 +2,7 @@ package com.plusmobileapps.sample.androiddecompose.characters
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersStore.*
-import com.plusmobileapps.sample.androiddecompose.data.RickAndMortyCharacter
+import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
 
 interface CharactersStore : Store<Intent, State, Nothing> {
 

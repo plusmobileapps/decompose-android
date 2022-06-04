@@ -71,6 +71,7 @@ class RootBlocImpl(
     private fun onCharactersOutput(output: BottomNavBloc.Output) {
         when (output) {
             is BottomNavBloc.Output.ShowCharacter -> router.push(Configuration.Character(output.id))
+            is BottomNavBloc.Output.ShowEpisode -> TODO()
         }
     }
 

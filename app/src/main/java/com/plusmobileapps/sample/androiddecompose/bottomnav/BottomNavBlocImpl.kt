@@ -16,6 +16,7 @@ import com.plusmobileapps.sample.androiddecompose.characters.CharactersBloc
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersBlocImpl
 import com.plusmobileapps.sample.androiddecompose.di.DI
 import com.plusmobileapps.sample.androiddecompose.episodes.EpisodesBloc
+import com.plusmobileapps.sample.androiddecompose.episodes.EpisodesBlocImpl
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
 import com.plusmobileapps.sample.androiddecompose.utils.asValue
 
@@ -24,7 +25,8 @@ class BottomNavBlocImpl(
     storeFactory: StoreFactory,
     dispatchers: Dispatchers,
     private val charactersBloc: (ComponentContext, (CharactersBloc.Output) -> Unit) -> CharactersBloc,
-    private val output: (BottomNavBloc.Output) -> Unit
+    private val episodesBloc: (ComponentContext, (EpisodesBloc.Output) -> Unit) -> EpisodesBloc,
+    private val bottomNavOutput: (BottomNavBloc.Output) -> Unit
 ) : BottomNavBloc, ComponentContext by componentContext {
 
     constructor(
@@ -42,7 +44,14 @@ class BottomNavBlocImpl(
                 output = characterOutput
             )
         },
-        output = output
+        episodesBloc = { context, episodesOutput ->
+            EpisodesBlocImpl(
+                componentContext = context,
+                di = di,
+                output = episodesOutput
+            )
+        },
+        bottomNavOutput = output
     )
 
     private val store: BottomNavigationStore = instanceKeeper.getStore {
@@ -98,21 +107,26 @@ class BottomNavBlocImpl(
         context: ComponentContext
     ): BottomNavBloc.Child = when (configuration) {
         Configuration.Characters -> BottomNavBloc.Child.Characters(
-            charactersBloc(
-                context,
-                this::onCharactersBlocOutput
-            )
+            charactersBloc(context, this::onCharactersBlocOutput)
         )
-        Configuration.Episodes -> BottomNavBloc.Child.Episodes(object : EpisodesBloc {}) // TODO
+        Configuration.Episodes -> BottomNavBloc.Child.Episodes(
+            episodesBloc(context, this::onEpisodesBlocOutput)
+        )
         Configuration.About -> BottomNavBloc.Child.About
     }
 
     private fun onCharactersBlocOutput(output: CharactersBloc.Output) {
         when (output) {
-            is CharactersBloc.Output.OpenCharacter -> this.output(
-                BottomNavBloc.Output.ShowCharacter(
-                    output.character.id
-                )
+            is CharactersBloc.Output.OpenCharacter -> bottomNavOutput(
+                BottomNavBloc.Output.ShowCharacter(output.character.id)
+            )
+        }
+    }
+
+    private fun onEpisodesBlocOutput(output: EpisodesBloc.Output) {
+        when (output) {
+            is EpisodesBloc.Output.OpenEpisode -> bottomNavOutput(
+                BottomNavBloc.Output.ShowEpisode(output.episode.id)
             )
         }
     }

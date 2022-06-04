@@ -33,5 +33,6 @@ interface BottomNavBloc {
 
     sealed class Output {
         data class ShowCharacter(val id: Int) : Output()
+        data class ShowEpisode(val id: Int) : Output()
     }
 }

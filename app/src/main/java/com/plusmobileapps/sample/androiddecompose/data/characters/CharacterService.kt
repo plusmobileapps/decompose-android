@@ -1,4 +1,4 @@
-package com.plusmobileapps.sample.androiddecompose.data
+package com.plusmobileapps.sample.androiddecompose.data.characters
 
 import retrofit2.http.GET
 

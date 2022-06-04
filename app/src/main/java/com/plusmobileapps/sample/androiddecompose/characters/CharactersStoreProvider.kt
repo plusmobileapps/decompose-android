@@ -8,8 +8,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersStore.Intent
 import com.plusmobileapps.sample.androiddecompose.characters.CharactersStore.State
-import com.plusmobileapps.sample.androiddecompose.data.CharactersRepository
-import com.plusmobileapps.sample.androiddecompose.data.RickAndMortyCharacter
+import com.plusmobileapps.sample.androiddecompose.data.characters.CharactersRepository
+import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
 import kotlinx.coroutines.launch
 
