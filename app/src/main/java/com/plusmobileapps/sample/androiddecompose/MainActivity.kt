@@ -18,6 +18,7 @@ import com.plusmobileapps.sample.androiddecompose.root.RootBloc
 import com.plusmobileapps.sample.androiddecompose.root.RootBlocImpl
 import com.plusmobileapps.sample.androiddecompose.ui.BottomNavUI
 import com.plusmobileapps.sample.androiddecompose.ui.CharacterDetailUI
+import com.plusmobileapps.sample.androiddecompose.ui.EpisodeDetailUI
 import com.plusmobileapps.sample.androiddecompose.ui.theme.DecomposeAndroidSampleTheme
 
 class MainActivity : ComponentActivity() {
@@ -49,6 +50,7 @@ fun RootUI(bloc: RootBloc) {
         when (val child = it.instance) {
             is RootBloc.Child.BottomNav -> BottomNavUI(bloc = child.bloc)
             is RootBloc.Child.Character -> CharacterDetailUI(bloc = child.bloc)
+            is RootBloc.Child.Episode -> EpisodeDetailUI(bloc = child.bloc)
         }
     }
 }

@@ -13,12 +13,15 @@ import com.plusmobileapps.sample.androiddecompose.bottomnav.BottomNavBlocImpl
 import com.plusmobileapps.sample.androiddecompose.character.CharacterBloc
 import com.plusmobileapps.sample.androiddecompose.character.CharacterBlocImpl
 import com.plusmobileapps.sample.androiddecompose.di.DI
+import com.plusmobileapps.sample.androiddecompose.episodedetail.EpisodeDetailBloc
+import com.plusmobileapps.sample.androiddecompose.episodedetail.EpisodeDetailBlocImpl
 
 class RootBlocImpl(
     componentContext: ComponentContext,
     private val bottomNav: (ComponentContext, (BottomNavBloc.Output) -> Unit) -> BottomNavBloc,
-    private val character: (ComponentContext, Int, (CharacterBloc.Output) -> Unit) -> CharacterBloc
-) : RootBloc, ComponentContext by componentContext {
+    private val character: (ComponentContext, Int, (CharacterBloc.Output) -> Unit) -> CharacterBloc,
+    private val episode: (ComponentContext, Int, (EpisodeDetailBloc.Output) -> Unit) -> EpisodeDetailBloc,
+    ) : RootBloc, ComponentContext by componentContext {
 
     constructor(componentContext: ComponentContext, di: DI) : this(
         componentContext = componentContext,
@@ -31,6 +34,14 @@ class RootBlocImpl(
         },
         character = { context, id, output ->
             CharacterBlocImpl(
+                context = context,
+                di = di,
+                id = id,
+                output = output
+            )
+        },
+        episode = { context, id, output ->
+            EpisodeDetailBlocImpl(
                 context = context,
                 di = di,
                 id = id,
@@ -59,6 +70,9 @@ class RootBlocImpl(
             is Configuration.Character -> RootBloc.Child.Character(
                 character(context, configuration.id, this::onCharacterOutput)
             )
+            is Configuration.Episode -> RootBloc.Child.Episode(
+                episode(context, configuration.id, this::onEpisodeDetailOutput)
+            )
         }
     }
 
@@ -71,7 +85,13 @@ class RootBlocImpl(
     private fun onCharactersOutput(output: BottomNavBloc.Output) {
         when (output) {
             is BottomNavBloc.Output.ShowCharacter -> router.push(Configuration.Character(output.id))
-            is BottomNavBloc.Output.ShowEpisode -> TODO()
+            is BottomNavBloc.Output.ShowEpisode -> router.push(Configuration.Episode(output.id))
+        }
+    }
+
+    private fun onEpisodeDetailOutput(output: EpisodeDetailBloc.Output) {
+        when (output) {
+            EpisodeDetailBloc.Output.Finished -> router.pop()
         }
     }
 
@@ -81,5 +101,8 @@ class RootBlocImpl(
 
         @Parcelize
         data class Character(val id: Int) : Configuration()
+
+        @Parcelize
+        data class Episode(val id: Int) : Configuration()
     }
 }
