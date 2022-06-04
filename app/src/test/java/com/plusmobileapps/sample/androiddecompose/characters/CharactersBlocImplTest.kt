@@ -28,6 +28,7 @@ class CharactersBlocImplTest {
             componentContext = DefaultComponentContext(lifecycle),
             dispatchers = dispatchers,
             storeFactory = DefaultStoreFactory(),
+            repository = mockk(),
             output = output
         )
     }
@@ -54,7 +55,7 @@ class CharactersBlocImplTest {
 
     @Test
     fun `on character clicked should emit output of that character`() {
-        val expected = RickAndMortyCharacter(1L, "some name", "")
+        val expected = RickAndMortyCharacter(1, "some name", "")
 
         bloc.onCharacterClicked(expected)
 

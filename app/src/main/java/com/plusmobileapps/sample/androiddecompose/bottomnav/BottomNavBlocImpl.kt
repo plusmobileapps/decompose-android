@@ -3,7 +3,6 @@ package com.plusmobileapps.sample.androiddecompose.bottomnav
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.RouterState
 import com.arkivanov.decompose.router.bringToFront
-import com.arkivanov.decompose.router.pop
 import com.arkivanov.decompose.router.router
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
@@ -69,6 +68,7 @@ class BottomNavBlocImpl(
                 when (it.activeChild.instance) {
                     is BottomNavBloc.Child.Characters -> BottomNavBloc.NavItem.Type.CHARACTERS
                     is BottomNavBloc.Child.Episodes -> BottomNavBloc.NavItem.Type.EPISODES
+                    is BottomNavBloc.Child.About -> BottomNavBloc.NavItem.Type.ABOUT
                 }
             )
         )
@@ -88,6 +88,7 @@ class BottomNavBlocImpl(
             when (item.type) {
                 BottomNavBloc.NavItem.Type.CHARACTERS -> Configuration.Characters
                 BottomNavBloc.NavItem.Type.EPISODES -> Configuration.Episodes
+                BottomNavBloc.NavItem.Type.ABOUT -> Configuration.About
             }
         )
     }
@@ -103,6 +104,7 @@ class BottomNavBlocImpl(
             )
         )
         Configuration.Episodes -> BottomNavBloc.Child.Episodes(object : EpisodesBloc {}) // TODO
+        Configuration.About -> BottomNavBloc.Child.About
     }
 
     private fun onCharactersBlocOutput(output: CharactersBloc.Output) {
@@ -121,5 +123,8 @@ class BottomNavBlocImpl(
 
         @Parcelize
         object Episodes : Configuration()
+
+        @Parcelize
+        object About : Configuration()
     }
 }
