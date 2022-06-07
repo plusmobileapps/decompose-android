@@ -1,4 +1,4 @@
-package com.plusmobileapps.sample.androiddecompose.character
+package com.plusmobileapps.sample.androiddecompose.characterdetail
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
@@ -10,20 +10,20 @@ import com.plusmobileapps.sample.androiddecompose.di.DI
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
 import com.plusmobileapps.sample.androiddecompose.utils.asValue
 
-class CharacterBlocImpl(
+class CharacterDetailBlocImpl(
     componentContext: ComponentContext,
     storeFactory: StoreFactory,
     dispatchers: Dispatchers,
     repository: CharactersRepository,
     private val id: Int,
-    private val output: (CharacterBloc.Output) -> Unit
-) : CharacterBloc, ComponentContext by componentContext {
+    private val output: (CharacterDetailBloc.Output) -> Unit
+) : CharacterDetailBloc, ComponentContext by componentContext {
 
     constructor(
         context: ComponentContext,
         di: DI,
         id: Int,
-        output: (CharacterBloc.Output) -> Unit
+        output: (CharacterDetailBloc.Output) -> Unit
     ) : this(
         componentContext = context,
         storeFactory = di.storeFactory,
@@ -33,12 +33,12 @@ class CharacterBlocImpl(
         output = output
     )
 
-    private val store: CharacterStore = instanceKeeper.getStore {
-        CharacterStoreProvider(storeFactory, dispatchers, repository, id).create()
+    private val store: CharacterDetailStore = instanceKeeper.getStore {
+        CharacterDetailStoreProvider(storeFactory, dispatchers, repository, id).create()
     }
 
-    override val models: Value<CharacterBloc.Model> = store.asValue().map {
-        CharacterBloc.Model(
+    override val models: Value<CharacterDetailBloc.Model> = store.asValue().map {
+        CharacterDetailBloc.Model(
             isLoading = it.isLoading,
             name = it.name,
             status = it.status,
@@ -48,6 +48,6 @@ class CharacterBlocImpl(
     }
 
     override fun onBackClicked() {
-        output(CharacterBloc.Output.Finished)
+        output(CharacterDetailBloc.Output.Finished)
     }
 }

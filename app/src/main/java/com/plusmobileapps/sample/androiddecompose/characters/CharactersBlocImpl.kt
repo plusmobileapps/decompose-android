@@ -37,7 +37,6 @@ class CharactersBlocImpl(
 
     override val models: Value<CharactersBloc.Model> = store.asValue().map { state ->
         CharactersBloc.Model(
-            query = state.query,
             characters = state.characters,
             error = state.error,
             isLoading = state.isLoading
@@ -46,17 +45,5 @@ class CharactersBlocImpl(
 
     override fun onCharacterClicked(character: RickAndMortyCharacter) {
         output(CharactersBloc.Output.OpenCharacter(character))
-    }
-
-    override fun onQueryChanged(query: String) {
-        store.accept(CharactersStore.Intent.UpdateQuery(query))
-    }
-
-    override fun onClearQueryClicked() {
-        store.accept(CharactersStore.Intent.UpdateQuery(""))
-    }
-
-    override fun onSearchClicked() {
-        store.accept(CharactersStore.Intent.ExecuteQuery)
     }
 }

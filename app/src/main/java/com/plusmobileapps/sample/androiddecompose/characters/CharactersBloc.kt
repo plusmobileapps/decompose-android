@@ -9,14 +9,7 @@ interface CharactersBloc {
 
     fun onCharacterClicked(character: RickAndMortyCharacter)
 
-    fun onQueryChanged(query: String)
-
-    fun onClearQueryClicked()
-
-    fun onSearchClicked()
-
     data class Model(
-        val query: String = "",
         val characters: List<RickAndMortyCharacter> = emptyList(),
         val error: String? = null,
         val isLoading: Boolean = false

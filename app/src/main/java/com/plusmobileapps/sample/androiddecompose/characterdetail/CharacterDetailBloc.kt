@@ -1,8 +1,8 @@
-package com.plusmobileapps.sample.androiddecompose.character
+package com.plusmobileapps.sample.androiddecompose.characterdetail
 
 import com.arkivanov.decompose.value.Value
 
-interface CharacterBloc {
+interface CharacterDetailBloc {
 
     val models: Value<Model>
 

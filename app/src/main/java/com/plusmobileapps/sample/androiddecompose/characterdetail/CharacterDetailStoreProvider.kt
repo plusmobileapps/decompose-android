@@ -1,17 +1,17 @@
-package com.plusmobileapps.sample.androiddecompose.character
+package com.plusmobileapps.sample.androiddecompose.characterdetail
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.plusmobileapps.sample.androiddecompose.character.CharacterStore.State
+import com.plusmobileapps.sample.androiddecompose.characterdetail.CharacterDetailStore.State
 import com.plusmobileapps.sample.androiddecompose.data.characters.CharactersRepository
 import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
 import kotlinx.coroutines.launch
 
-class CharacterStoreProvider(
+class CharacterDetailStoreProvider(
     private val storeFactory: StoreFactory,
     private val dispatchers: Dispatchers,
     private val repository: CharactersRepository,
@@ -22,7 +22,7 @@ class CharacterStoreProvider(
         data class CharacterUpdated(val character: RickAndMortyCharacter) : Message()
     }
 
-    fun create(): CharacterStore = object : CharacterStore,
+    fun create(): CharacterDetailStore = object : CharacterDetailStore,
         Store<Nothing, State, Nothing> by storeFactory.create(
             name = "CharacterStore",
             initialState = State(),

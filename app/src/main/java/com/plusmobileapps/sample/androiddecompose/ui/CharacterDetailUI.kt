@@ -15,13 +15,13 @@ import coil.compose.AsyncImage
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import com.plusmobileapps.sample.androiddecompose.character.CharacterBloc
+import com.plusmobileapps.sample.androiddecompose.characterdetail.CharacterDetailBloc
 import com.plusmobileapps.sample.androiddecompose.R
 import com.plusmobileapps.sample.androiddecompose.ui.theme.DecomposeAndroidSampleTheme
 import com.plusmobileapps.sample.androiddecompose.ui.theme.Typography
 
 @Composable
-fun CharacterDetailUI(bloc: CharacterBloc) {
+fun CharacterDetailUI(bloc: CharacterDetailBloc) {
     val model = bloc.models.subscribeAsState()
     val state = model.value
     Scaffold(
@@ -56,9 +56,9 @@ fun CharacterDetailUI(bloc: CharacterBloc) {
 fun CharacterDetailUIPreview() {
     DecomposeAndroidSampleTheme {
         Surface {
-            CharacterDetailUI(bloc = object : CharacterBloc {
-                override val models: Value<CharacterBloc.Model> = MutableValue(
-                    CharacterBloc.Model(
+            CharacterDetailUI(bloc = object : CharacterDetailBloc {
+                override val models: Value<CharacterDetailBloc.Model> = MutableValue(
+                    CharacterDetailBloc.Model(
                         name = "Morty with some really long name to see what happens",
                         status = "Alive",
                         species = "Human",

@@ -71,18 +71,6 @@ fun CharactersUIPreview() {
                 override fun onCharacterClicked(character: RickAndMortyCharacter) {
                     TODO("Not yet implemented")
                 }
-
-                override fun onQueryChanged(query: String) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onClearQueryClicked() {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onSearchClicked() {
-                    TODO("Not yet implemented")
-                }
             }, paddingValues = PaddingValues(0.dp))
         }
     }

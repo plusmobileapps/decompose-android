@@ -1,9 +1,9 @@
-package com.plusmobileapps.sample.androiddecompose.character
+package com.plusmobileapps.sample.androiddecompose.characterdetail
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.plusmobileapps.sample.androiddecompose.character.CharacterStore.State
+import com.plusmobileapps.sample.androiddecompose.characterdetail.CharacterDetailStore.State
 
-interface CharacterStore : Store<Nothing, State, Nothing> {
+interface CharacterDetailStore : Store<Nothing, State, Nothing> {
 
     data class State(
         val isLoading: Boolean = true,

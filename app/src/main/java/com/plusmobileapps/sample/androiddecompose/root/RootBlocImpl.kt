@@ -10,17 +10,18 @@ import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 import com.plusmobileapps.sample.androiddecompose.bottomnav.BottomNavBloc
 import com.plusmobileapps.sample.androiddecompose.bottomnav.BottomNavBlocImpl
-import com.plusmobileapps.sample.androiddecompose.character.CharacterBloc
-import com.plusmobileapps.sample.androiddecompose.character.CharacterBlocImpl
+import com.plusmobileapps.sample.androiddecompose.characterdetail.CharacterDetailBloc
+import com.plusmobileapps.sample.androiddecompose.characterdetail.CharacterDetailBlocImpl
 import com.plusmobileapps.sample.androiddecompose.di.DI
 import com.plusmobileapps.sample.androiddecompose.episodedetail.EpisodeDetailBloc
 import com.plusmobileapps.sample.androiddecompose.episodedetail.EpisodeDetailBlocImpl
+import com.plusmobileapps.sample.androiddecompose.utils.Consumer
 
 class RootBlocImpl(
     componentContext: ComponentContext,
-    private val bottomNav: (ComponentContext, (BottomNavBloc.Output) -> Unit) -> BottomNavBloc,
-    private val character: (ComponentContext, Int, (CharacterBloc.Output) -> Unit) -> CharacterBloc,
-    private val episode: (ComponentContext, Int, (EpisodeDetailBloc.Output) -> Unit) -> EpisodeDetailBloc,
+    private val bottomNav: (ComponentContext, Consumer<BottomNavBloc.Output>) -> BottomNavBloc,
+    private val character: (ComponentContext, Int, Consumer<CharacterDetailBloc.Output>) -> CharacterDetailBloc,
+    private val episode: (ComponentContext, Int, Consumer<EpisodeDetailBloc.Output>) -> EpisodeDetailBloc,
     ) : RootBloc, ComponentContext by componentContext {
 
     constructor(componentContext: ComponentContext, di: DI) : this(
@@ -33,7 +34,7 @@ class RootBlocImpl(
             )
         },
         character = { context, id, output ->
-            CharacterBlocImpl(
+            CharacterDetailBlocImpl(
                 context = context,
                 di = di,
                 id = id,
@@ -76,9 +77,9 @@ class RootBlocImpl(
         }
     }
 
-    private fun onCharacterOutput(output: CharacterBloc.Output) {
+    private fun onCharacterOutput(output: CharacterDetailBloc.Output) {
         when (output) {
-            CharacterBloc.Output.Finished -> router.pop()
+            CharacterDetailBloc.Output.Finished -> router.pop()
         }
     }
 
