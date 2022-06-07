@@ -16,7 +16,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 interface DI {
-    val apiKey: String
     val dispatchers: Dispatchers
     val storeFactory: StoreFactory
     val retrofit: Retrofit
@@ -27,8 +26,6 @@ interface DI {
 }
 
 object ServiceLocator : DI {
-
-    override val apiKey: String = BuildConfig.API_KEY
 
     override val dispatchers: Dispatchers = DispatchersImpl()
 
