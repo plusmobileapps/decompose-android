@@ -12,11 +12,13 @@ import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.plusmobileapps.sample.androiddecompose.bloc.bottomnav.BottomNavBloc.*
 import com.plusmobileapps.sample.androiddecompose.bloc.characters.CharactersBloc
 import com.plusmobileapps.sample.androiddecompose.bloc.characters.CharactersBlocImpl
 import com.plusmobileapps.sample.androiddecompose.di.DI
 import com.plusmobileapps.sample.androiddecompose.bloc.episodes.EpisodesBloc
 import com.plusmobileapps.sample.androiddecompose.bloc.episodes.EpisodesBlocImpl
+import com.plusmobileapps.sample.androiddecompose.utils.Consumer
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
 import com.plusmobileapps.sample.androiddecompose.utils.asValue
 
@@ -24,15 +26,15 @@ class BottomNavBlocImpl(
     componentContext: ComponentContext,
     storeFactory: StoreFactory,
     dispatchers: Dispatchers,
-    private val charactersBloc: (ComponentContext, (CharactersBloc.Output) -> Unit) -> CharactersBloc,
-    private val episodesBloc: (ComponentContext, (EpisodesBloc.Output) -> Unit) -> EpisodesBloc,
-    private val bottomNavOutput: (BottomNavBloc.Output) -> Unit
+    private val charactersBloc: (ComponentContext, Consumer<CharactersBloc.Output>) -> CharactersBloc,
+    private val episodesBloc: (ComponentContext, Consumer<EpisodesBloc.Output>) -> EpisodesBloc,
+    private val bottomNavOutput: Consumer<Output>
 ) : BottomNavBloc, ComponentContext by componentContext {
 
     constructor(
         componentContext: ComponentContext,
         di: DI,
-        output: (BottomNavBloc.Output) -> Unit
+        output: Consumer<Output>
     ) : this(
         componentContext = componentContext,
         storeFactory = di.storeFactory,
@@ -58,26 +60,26 @@ class BottomNavBlocImpl(
         BottomNavStoreProvider(storeFactory, dispatchers).create()
     }
 
-    private val router = router<Configuration, BottomNavBloc.Child>(
+    private val router = router<Configuration, Child>(
         initialConfiguration = Configuration.Characters,
         handleBackButton = true,
         childFactory = ::createChild,
         key = "BottomNavRouter"
     )
 
-    override val routerState: Value<RouterState<*, BottomNavBloc.Child>> = router.state
+    override val routerState: Value<RouterState<*, Child>> = router.state
 
-    override val models: Value<BottomNavBloc.Model> = store.asValue().map {
-        BottomNavBloc.Model(it.navItems)
+    override val models: Value<Model> = store.asValue().map {
+        Model(it.navItems)
     }
 
-    private val routerSubscriber: (RouterState<Configuration, BottomNavBloc.Child>) -> Unit = {
+    private val routerSubscriber: (RouterState<Configuration, Child>) -> Unit = {
         store.accept(
             BottomNavigationStore.Intent.SelectNavItem(
                 when (it.activeChild.instance) {
-                    is BottomNavBloc.Child.Characters -> BottomNavBloc.NavItem.Type.CHARACTERS
-                    is BottomNavBloc.Child.Episodes -> BottomNavBloc.NavItem.Type.EPISODES
-                    is BottomNavBloc.Child.About -> BottomNavBloc.NavItem.Type.ABOUT
+                    is Child.Characters -> NavItem.Type.CHARACTERS
+                    is Child.Episodes -> NavItem.Type.EPISODES
+                    is Child.About -> NavItem.Type.ABOUT
                 }
             )
         )
@@ -92,12 +94,12 @@ class BottomNavBlocImpl(
         }
     }
 
-    override fun onNavItemClicked(item: BottomNavBloc.NavItem) {
+    override fun onNavItemClicked(item: NavItem) {
         router.bringToFront(
             when (item.type) {
-                BottomNavBloc.NavItem.Type.CHARACTERS -> Configuration.Characters
-                BottomNavBloc.NavItem.Type.EPISODES -> Configuration.Episodes
-                BottomNavBloc.NavItem.Type.ABOUT -> Configuration.About
+                NavItem.Type.CHARACTERS -> Configuration.Characters
+                NavItem.Type.EPISODES -> Configuration.Episodes
+                NavItem.Type.ABOUT -> Configuration.About
             }
         )
     }
@@ -105,20 +107,20 @@ class BottomNavBlocImpl(
     private fun createChild(
         configuration: Configuration,
         context: ComponentContext
-    ): BottomNavBloc.Child = when (configuration) {
-        Configuration.Characters -> BottomNavBloc.Child.Characters(
+    ): Child = when (configuration) {
+        Configuration.Characters -> Child.Characters(
             charactersBloc(context, this::onCharactersBlocOutput)
         )
-        Configuration.Episodes -> BottomNavBloc.Child.Episodes(
+        Configuration.Episodes -> Child.Episodes(
             episodesBloc(context, this::onEpisodesBlocOutput)
         )
-        Configuration.About -> BottomNavBloc.Child.About
+        Configuration.About -> Child.About
     }
 
     private fun onCharactersBlocOutput(output: CharactersBloc.Output) {
         when (output) {
             is CharactersBloc.Output.OpenCharacter -> bottomNavOutput(
-                BottomNavBloc.Output.ShowCharacter(output.character.id)
+                Output.ShowCharacter(output.character.id)
             )
         }
     }
@@ -126,7 +128,7 @@ class BottomNavBlocImpl(
     private fun onEpisodesBlocOutput(output: EpisodesBloc.Output) {
         when (output) {
             is EpisodesBloc.Output.OpenEpisode -> bottomNavOutput(
-                BottomNavBloc.Output.ShowEpisode(output.episode.id)
+                Output.ShowEpisode(output.episode.id)
             )
         }
     }

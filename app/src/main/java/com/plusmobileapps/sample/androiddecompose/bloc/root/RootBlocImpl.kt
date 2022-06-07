@@ -22,7 +22,7 @@ class RootBlocImpl(
     private val bottomNav: (ComponentContext, Consumer<BottomNavBloc.Output>) -> BottomNavBloc,
     private val character: (ComponentContext, Int, Consumer<CharacterDetailBloc.Output>) -> CharacterDetailBloc,
     private val episode: (ComponentContext, Int, Consumer<EpisodeDetailBloc.Output>) -> EpisodeDetailBloc,
-    ) : RootBloc, ComponentContext by componentContext {
+) : RootBloc, ComponentContext by componentContext {
 
     constructor(componentContext: ComponentContext, di: DI) : this(
         componentContext = componentContext,
