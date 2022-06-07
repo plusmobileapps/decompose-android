@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.plusmobileapps.sample.androiddecompose.R
-import com.plusmobileapps.sample.androiddecompose.episodedetail.EpisodeDetailBloc
+import com.plusmobileapps.sample.androiddecompose.bloc.episodedetail.EpisodeDetailBloc
 import com.plusmobileapps.sample.androiddecompose.ui.theme.Typography
 
 @Composable

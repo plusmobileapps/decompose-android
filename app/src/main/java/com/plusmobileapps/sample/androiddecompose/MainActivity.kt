@@ -14,8 +14,8 @@ import com.arkivanov.decompose.extensions.compose.jetpack.Children
 import com.arkivanov.decompose.extensions.compose.jetpack.animation.child.childAnimation
 import com.arkivanov.decompose.extensions.compose.jetpack.animation.child.slide
 import com.plusmobileapps.sample.androiddecompose.di.ServiceLocator
-import com.plusmobileapps.sample.androiddecompose.root.RootBloc
-import com.plusmobileapps.sample.androiddecompose.root.RootBlocImpl
+import com.plusmobileapps.sample.androiddecompose.bloc.root.RootBloc
+import com.plusmobileapps.sample.androiddecompose.bloc.root.RootBlocImpl
 import com.plusmobileapps.sample.androiddecompose.ui.BottomNavUI
 import com.plusmobileapps.sample.androiddecompose.ui.CharacterDetailUI
 import com.plusmobileapps.sample.androiddecompose.ui.EpisodeDetailUI

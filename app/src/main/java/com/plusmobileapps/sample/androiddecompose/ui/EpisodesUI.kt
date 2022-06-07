@@ -16,7 +16,7 @@ import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.plusmobileapps.sample.androiddecompose.data.episodes.Episode
-import com.plusmobileapps.sample.androiddecompose.episodes.EpisodesBloc
+import com.plusmobileapps.sample.androiddecompose.bloc.episodes.EpisodesBloc
 import com.plusmobileapps.sample.androiddecompose.ui.theme.DecomposeAndroidSampleTheme
 import com.plusmobileapps.sample.androiddecompose.ui.theme.Typography
 

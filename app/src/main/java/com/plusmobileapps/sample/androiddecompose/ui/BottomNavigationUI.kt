@@ -13,8 +13,8 @@ import com.arkivanov.decompose.extensions.compose.jetpack.animation.child.scale
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import com.plusmobileapps.sample.androiddecompose.bottomnav.BottomNavBloc
-import com.plusmobileapps.sample.androiddecompose.bottomnav.BottomNavigationStore
+import com.plusmobileapps.sample.androiddecompose.bloc.bottomnav.BottomNavBloc
+import com.plusmobileapps.sample.androiddecompose.bloc.bottomnav.BottomNavigationStore
 import com.plusmobileapps.sample.androiddecompose.ui.theme.DecomposeAndroidSampleTheme
 
 @Composable
