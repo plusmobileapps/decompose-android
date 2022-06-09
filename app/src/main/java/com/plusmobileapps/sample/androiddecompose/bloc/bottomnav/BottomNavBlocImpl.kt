@@ -74,15 +74,14 @@ class BottomNavBlocImpl(
     }
 
     private val routerSubscriber: (RouterState<Configuration, Child>) -> Unit = {
-        store.accept(
-            BottomNavigationStore.Intent.SelectNavItem(
-                when (it.activeChild.instance) {
-                    is Child.Characters -> NavItem.Type.CHARACTERS
-                    is Child.Episodes -> NavItem.Type.EPISODES
-                    is Child.About -> NavItem.Type.ABOUT
-                }
-            )
+        val intent = BottomNavigationStore.Intent.SelectNavItem(
+            when (it.activeChild.instance) {
+                is Child.Characters -> NavItem.Type.CHARACTERS
+                is Child.Episodes -> NavItem.Type.EPISODES
+                is Child.About -> NavItem.Type.ABOUT
+            }
         )
+        store.accept(intent)
     }
 
     init {

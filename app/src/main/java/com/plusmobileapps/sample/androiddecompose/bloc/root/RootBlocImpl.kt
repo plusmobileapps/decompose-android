@@ -66,7 +66,7 @@ class RootBlocImpl(
     ): RootBloc.Child {
         return when (configuration) {
             Configuration.BottomNav -> RootBloc.Child.BottomNav(
-                bottomNav(context, this::onCharactersOutput)
+                bottomNav(context, this::onBottomNavOutput)
             )
             is Configuration.Character -> RootBloc.Child.Character(
                 character(context, configuration.id, this::onCharacterOutput)
@@ -83,7 +83,7 @@ class RootBlocImpl(
         }
     }
 
-    private fun onCharactersOutput(output: BottomNavBloc.Output) {
+    private fun onBottomNavOutput(output: BottomNavBloc.Output) {
         when (output) {
             is BottomNavBloc.Output.ShowCharacter -> router.push(Configuration.Character(output.id))
             is BottomNavBloc.Output.ShowEpisode -> router.push(Configuration.Episode(output.id))
