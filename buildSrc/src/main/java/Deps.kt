@@ -40,6 +40,13 @@ object Deps {
         }
     }
 
+    object SqlDelight {
+        const val VERSION = "1.5.3"
+        const val gradlePlugin = "com.squareup.sqldelight:gradle-plugin:$VERSION"
+        const val driver =  "com.squareup.sqldelight:android-driver:$VERSION"
+        const val coroutines = "com.squareup.sqldelight:coroutines-extensions-jvm:$VERSION"
+    }
+
     object ArkIvanov {
         object MVIKotlin {
             private const val VERSION = "3.0.0-beta02"

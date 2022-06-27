@@ -2,14 +2,20 @@ package com.plusmobileapps.sample.androiddecompose.bloc.characters
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.plusmobileapps.sample.androiddecompose.bloc.characters.CharactersStore.*
-import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
 
-interface CharactersStore : Store<Nothing, State, Nothing> {
+interface CharactersStore : Store<Intent, State, Nothing> {
 
     data class State(
         val query: String = "",
-        val characters: List<RickAndMortyCharacter> = emptyList(),
+        val items: List<CharactersListItem> = emptyList(),
         val error: String? = null,
         val isLoading: Boolean = false
-    )
+    ) {
+        val isPageLoading: Boolean =
+            items.lastOrNull()?.let { it is CharactersListItem.PageLoading } ?: false
+    }
+
+    sealed class Intent {
+        object LoadMoreCharacters : Intent()
+    }
 }

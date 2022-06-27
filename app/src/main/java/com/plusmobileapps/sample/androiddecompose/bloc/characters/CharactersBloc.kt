@@ -7,10 +7,12 @@ interface CharactersBloc {
 
     val models: Value<Model>
 
+    fun loadMoreCharacters()
+
     fun onCharacterClicked(character: RickAndMortyCharacter)
 
     data class Model(
-        val characters: List<RickAndMortyCharacter> = emptyList(),
+        val characters: List<CharactersListItem> = emptyList(),
         val error: String? = null,
         val isLoading: Boolean = false
     )

@@ -19,6 +19,7 @@ import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.plusmobileapps.sample.androiddecompose.bloc.characters.CharactersBloc
+import com.plusmobileapps.sample.androiddecompose.bloc.characters.CharactersListItem
 import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.ui.theme.DecomposeAndroidSampleTheme
 import com.plusmobileapps.sample.androiddecompose.ui.theme.Typography
@@ -30,7 +31,11 @@ fun CharactersUI(bloc: CharactersBloc, paddingValues: PaddingValues) {
 
     LazyColumn(modifier = Modifier.padding(paddingValues)) {
         items(characters) {
-            CharacterListItem(character = it) { bloc.onCharacterClicked(it) }
+            when (it) {
+                is CharactersListItem.Character -> CharacterListItem(character = it.value) { bloc.onCharacterClicked(it.value) }
+                is CharactersListItem.PageLoading -> TODO()
+            }
+
         }
     }
 
@@ -56,22 +61,26 @@ fun CharacterListItem(character: RickAndMortyCharacter, onClick: () -> Unit) {
     }
 }
 
-@Preview
-@Composable
-fun CharactersUIPreview() {
-    DecomposeAndroidSampleTheme {
-        Surface {
-            CharactersUI(bloc = object : CharactersBloc {
-                override val models: Value<CharactersBloc.Model> =
-                    MutableValue(CharactersBloc.Model(characters = listOf(
-                        RickAndMortyCharacter(0, "Rick Sanchez", "https://rickandmortyapi.com/api/character/avatar/377.jpeg"),
-                        RickAndMortyCharacter(1, "Morty", "Some Image")
-                    )))
-
-                override fun onCharacterClicked(character: RickAndMortyCharacter) {
-                    TODO("Not yet implemented")
-                }
-            }, paddingValues = PaddingValues(0.dp))
-        }
-    }
-}
+//@Preview
+//@Composable
+//fun CharactersUIPreview() {
+//    DecomposeAndroidSampleTheme {
+//        Surface {
+//            CharactersUI(bloc = object : CharactersBloc {
+//                override val models: Value<CharactersBloc.Model> =
+//                    MutableValue(CharactersBloc.Model(characters = listOf(
+//                        RickAndMortyCharacter(0, "Rick Sanchez", "https://rickandmortyapi.com/api/character/avatar/377.jpeg"),
+//                        RickAndMortyCharacter(1, "Morty", "Some Image")
+//                    )))
+//
+//                override fun onCharacterClicked(character: RickAndMortyCharacter) {
+//                    TODO("Not yet implemented")
+//                }
+//
+//                override fun loadMoreCharacters() {
+//                    TODO("Not yet implemented")
+//                }
+//            }, paddingValues = PaddingValues(0.dp))
+//        }
+//    }
+//}

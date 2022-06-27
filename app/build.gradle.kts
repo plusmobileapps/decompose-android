@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("kotlin-parcelize")
+    id("com.squareup.sqldelight")
 }
 
 android {
@@ -70,6 +71,9 @@ dependencies {
     implementation(Deps.Android.Ktx.core)
     implementation(Deps.Android.Ktx.lifecycle)
 
+    implementation(Deps.SqlDelight.driver)
+    implementation(Deps.SqlDelight.coroutines)
+
     // architecture
     implementation(Deps.ArkIvanov.MVIKotlin.mvikotlin)
     implementation(Deps.ArkIvanov.MVIKotlin.mvikotlinMain)
@@ -99,5 +103,12 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
             "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
         )
 
+    }
+}
+
+sqldelight {
+    database("MyDatabase") {
+        packageName = "com.plusmobileapps.sample.androiddecompose.db"
+        sourceFolders = listOf("sqldelight")
     }
 }
