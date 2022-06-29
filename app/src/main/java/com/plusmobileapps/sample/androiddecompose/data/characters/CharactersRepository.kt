@@ -1,6 +1,7 @@
 package com.plusmobileapps.sample.androiddecompose.data.characters
 
 import android.util.Log
+import com.plusmobileapps.sample.androiddecompose.data.PreferenceDataStore
 import com.plusmobileapps.sample.androiddecompose.db.Character
 import com.plusmobileapps.sample.androiddecompose.db.CharactersQueries
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
@@ -8,9 +9,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -24,8 +23,13 @@ interface CharactersRepository {
 class CharactersRepositoryImpl(
     private val service: CharacterService,
     private val dispatchers: Dispatchers,
-    private val db: CharactersQueries
+    private val db: CharactersQueries,
+    private val preferenceDataStore: PreferenceDataStore
 ) : CharactersRepository {
+
+    companion object {
+        const val CHARACTERS_PAGE_KEY = "CHARACTERS_PAGE_KEY"
+    }
 
     private var nextPage = 1
 
@@ -33,7 +37,26 @@ class CharactersRepositoryImpl(
     private val scope = CoroutineScope(dispatchers.io + job)
 
     init {
-        loadNextPage()
+        scope.launch {
+            preferenceDataStore.getIntPreferenceFlow(CHARACTERS_PAGE_KEY, 1)
+                .take(1)
+                .collect { lastFetchedPage ->
+                    nextPage = lastFetchedPage
+                    if (lastFetchedPage == 1) {
+                        loadNextPage()
+                    }
+                    observeLastFetchedPage()
+                }
+        }
+    }
+
+    private fun observeLastFetchedPage() {
+        scope.launch {
+            preferenceDataStore.getIntPreferenceFlow(CHARACTERS_PAGE_KEY, 1)
+                .collect { lastFetchedPage ->
+                    nextPage = lastFetchedPage
+                }
+        }
     }
 
     override var hasMoreCharactersToLoad: Boolean = true
@@ -60,7 +83,7 @@ class CharactersRepositoryImpl(
                     )
                 }
             }
-            nextPage += 1
+            preferenceDataStore.setIntPreference(CHARACTERS_PAGE_KEY, page + 1)
         } catch (e: Exception) {
             Log.e("CharactersRepository", "Could fetch characters", e)
         }

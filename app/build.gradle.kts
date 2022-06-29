@@ -82,6 +82,7 @@ dependencies {
     implementation(Deps.ArkIvanov.MVIKotlin.mvikotlinExtensionsCoroutines)
     implementation(Deps.ArkIvanov.Decompose.decompose)
     implementation(Deps.ArkIvanov.Decompose.extensionsCompose)
+    implementation(Deps.Android.dataStore)
 
     testImplementation("junit:junit:4.13.2")
     testImplementation(Deps.Mockk.core)

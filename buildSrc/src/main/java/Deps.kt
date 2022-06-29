@@ -20,6 +20,7 @@ object Deps {
         }
 
         const val coil = "io.coil-kt:coil-compose:2.0.0"
+        const val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
 
         object Compose {
             const val VERSION = "1.1.1"

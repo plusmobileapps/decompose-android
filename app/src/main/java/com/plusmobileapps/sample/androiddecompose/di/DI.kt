@@ -1,11 +1,12 @@
 package com.plusmobileapps.sample.androiddecompose.di
 
-import android.content.Context
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.plusmobileapps.sample.androiddecompose.BuildConfig
 import com.plusmobileapps.sample.androiddecompose.MyApplication
+import com.plusmobileapps.sample.androiddecompose.data.PreferenceDataStore
+import com.plusmobileapps.sample.androiddecompose.data.PreferenceDataStoreImpl
 import com.plusmobileapps.sample.androiddecompose.data.characters.CharacterService
 import com.plusmobileapps.sample.androiddecompose.data.characters.CharactersRepository
 import com.plusmobileapps.sample.androiddecompose.data.characters.CharactersRepositoryImpl
@@ -28,11 +29,16 @@ interface DI {
     val charactersRepository: CharactersRepository
     val episodeService: EpisodeService
     val episodeRepository: EpisodeRepository
+    val preferenceDataStore: PreferenceDataStore
 }
 
 object ServiceLocator : DI {
 
     override val database: MyDatabase by lazy { createDatabase(MyApplication.context) }
+
+    override val preferenceDataStore: PreferenceDataStore by lazy {
+        PreferenceDataStoreImpl(MyApplication.context)
+    }
     override val dispatchers: Dispatchers = DispatchersImpl()
 
     override val storeFactory: StoreFactory = if (BuildConfig.DEBUG) {
@@ -52,7 +58,8 @@ object ServiceLocator : DI {
         CharactersRepositoryImpl(
             service = characterService,
             dispatchers = dispatchers,
-            db = database.charactersQueries
+            db = database.charactersQueries,
+            preferenceDataStore = preferenceDataStore
         )
     }
 

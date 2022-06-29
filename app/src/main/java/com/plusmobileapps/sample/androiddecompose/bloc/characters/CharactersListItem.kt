@@ -4,5 +4,9 @@ import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCh
 
 sealed class CharactersListItem {
     data class Character(val value: RickAndMortyCharacter) : CharactersListItem()
-    data class PageLoading(val isLoading: Boolean, val hasMore: Boolean) : CharactersListItem()
+    data class PageLoading(val isLoading: Boolean, val hasMore: Boolean) : CharactersListItem() {
+        companion object {
+            const val KEY = -1
+        }
+    }
 }
