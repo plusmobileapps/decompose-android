@@ -29,19 +29,26 @@ class CharactersRepositoryImpl(
 
     companion object {
         const val CHARACTERS_PAGE_KEY = "CHARACTERS_PAGE_KEY"
+        const val TOTAL_PAGES_KEY = "CHARACTER_TOTAL_PAGES_KEY"
     }
 
     private var nextPage = 1
+    private var totalPages = Int.MAX_VALUE
 
     private val job = Job()
     private val scope = CoroutineScope(dispatchers.io + job)
 
     init {
         scope.launch {
-            preferenceDataStore.getIntPreferenceFlow(CHARACTERS_PAGE_KEY, 1)
-                .take(1)
+            preferenceDataStore.getIntPreferenceFlow(TOTAL_PAGES_KEY, Int.MAX_VALUE)
+                .combine(
+                    preferenceDataStore.getIntPreferenceFlow(CHARACTERS_PAGE_KEY, 1)
+                ) { totalPages, lastPageFetched ->
+                    this@CharactersRepositoryImpl.totalPages = totalPages
+                    this@CharactersRepositoryImpl.nextPage = lastPageFetched
+                    lastPageFetched
+                }.take(1)
                 .collect { lastFetchedPage ->
-                    nextPage = lastFetchedPage
                     if (lastFetchedPage == 1) {
                         loadNextPage()
                     }
@@ -56,11 +63,15 @@ class CharactersRepositoryImpl(
                 .collect { lastFetchedPage ->
                     nextPage = lastFetchedPage
                 }
+            preferenceDataStore.getIntPreferenceFlow(TOTAL_PAGES_KEY, Int.MAX_VALUE)
+                .collect { totalPages ->
+                    this@CharactersRepositoryImpl.totalPages = totalPages
+                }
         }
     }
 
-    override var hasMoreCharactersToLoad: Boolean = true
-        private set
+    override val hasMoreCharactersToLoad: Boolean
+        get() = nextPage < totalPages
 
     override fun loadNextPage() {
         scope.launch {
@@ -69,6 +80,7 @@ class CharactersRepositoryImpl(
     }
 
     private suspend fun fetchCharacters(page: Int) {
+        if (!hasMoreCharactersToLoad) return
         try {
             val response = service.getCharacters(page.toString())
             val characters = response.results.map { RickAndMortyCharacter.fromDTO(it) }
@@ -84,6 +96,7 @@ class CharactersRepositoryImpl(
                 }
             }
             preferenceDataStore.setIntPreference(CHARACTERS_PAGE_KEY, page + 1)
+            preferenceDataStore.setIntPreference(TOTAL_PAGES_KEY, response.info.pages)
         } catch (e: Exception) {
             Log.e("CharactersRepository", "Could fetch characters", e)
         }

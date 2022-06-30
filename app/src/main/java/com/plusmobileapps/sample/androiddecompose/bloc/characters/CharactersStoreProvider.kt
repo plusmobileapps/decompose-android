@@ -57,8 +57,11 @@ class CharactersStoreProvider(
             if (state.isLoading || state.isPageLoading) {
                 return
             }
-            dispatch(Message.LoadingNextPage(hasMore = repository.hasMoreCharactersToLoad))
-            repository.loadNextPage()
+            val hasMoreToLoad = repository.hasMoreCharactersToLoad
+            if (hasMoreToLoad) {
+                dispatch(Message.LoadingNextPage(hasMore = hasMoreToLoad))
+                repository.loadNextPage()
+            }
         }
     }
 
@@ -70,7 +73,10 @@ class CharactersStoreProvider(
                     isLoading = false
                 )
                 is Message.LoadingNextPage -> copy(
-                    items = items + CharactersListItem.PageLoading(isLoading = true, hasMore = msg.hasMore)
+                    items = items + CharactersListItem.PageLoading(
+                        isLoading = true,
+                        hasMore = msg.hasMore
+                    )
                 )
             }
     }
