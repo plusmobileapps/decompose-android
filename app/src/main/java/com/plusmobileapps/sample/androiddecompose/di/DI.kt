@@ -68,7 +68,9 @@ object ServiceLocator : DI {
     override val episodeRepository: EpisodeRepository by lazy {
         EpisodeRepositoryImpl(
             service = episodeService,
-            dispatchers = dispatchers
+            dispatchers = dispatchers,
+            db = database.episodesQueries,
+            preferenceDataStore = preferenceDataStore
         )
     }
 }

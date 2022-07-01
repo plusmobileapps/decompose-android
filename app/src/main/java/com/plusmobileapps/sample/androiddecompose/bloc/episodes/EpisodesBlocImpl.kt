@@ -46,4 +46,8 @@ class EpisodesBlocImpl(
     override fun onEpisodeClicked(episode: Episode) {
         output(EpisodesBloc.Output.OpenEpisode(episode))
     }
+
+    override fun loadMore() {
+        store.accept(EpisodesStore.Intent.LoadMore)
+    }
 }

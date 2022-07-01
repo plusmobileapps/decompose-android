@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.plusmobileapps.sample.androiddecompose.bloc.episodes.EpisodesStore.Intent
 import com.plusmobileapps.sample.androiddecompose.data.episodes.Episode
 import com.plusmobileapps.sample.androiddecompose.data.episodes.EpisodeRepository
 import com.plusmobileapps.sample.androiddecompose.bloc.episodes.EpisodesStore.State
@@ -18,12 +19,13 @@ class EpisodesStoreProvider(
 ) {
 
     private sealed class Message {
+        object LoadingMore : Message()
         data class EpisodesUpdated(val episodes: List<Episode>) : Message()
         data class Error(val error: String) : Message()
     }
 
     fun create(): EpisodesStore = object : EpisodesStore,
-        Store<Nothing, State, Nothing> by storeFactory.create(
+        Store<Intent, State, Nothing> by storeFactory.create(
             name = "EpisodesStore",
             initialState = State(),
             bootstrapper = SimpleBootstrapper(Unit),
@@ -32,14 +34,21 @@ class EpisodesStoreProvider(
         ) {}
 
     private inner class ExecutorImpl :
-        CoroutineExecutor<Nothing, Unit, State, Message, Nothing>(dispatchers.main) {
+        CoroutineExecutor<Intent, Unit, State, Message, Nothing>(dispatchers.main) {
         override fun executeAction(action: Unit, getState: () -> State) {
             scope.launch {
-                try {
-                    val episodes = repository.getEpisodes()
+                repository.getEpisodes().collect { episodes ->
                     dispatch(Message.EpisodesUpdated(episodes))
-                } catch (e: Exception) {
-                    dispatch(Message.Error(e.message.toString()))
+                }
+            }
+        }
+
+        override fun executeIntent(intent: Intent, getState: () -> State) {
+            when (intent) {
+                Intent.LoadMore -> {
+                    if (getState().isLoading) return
+                    dispatch(Message.LoadingMore)
+                    repository.loadNextPage()
                 }
             }
         }
@@ -50,6 +59,7 @@ class EpisodesStoreProvider(
             when (msg) {
                 is Message.EpisodesUpdated -> State(isLoading = false, episodes = msg.episodes)
                 is Message.Error -> State(isLoading = false, error = msg.error)
+                Message.LoadingMore -> copy(isLoading = true)
             }
     }
 }

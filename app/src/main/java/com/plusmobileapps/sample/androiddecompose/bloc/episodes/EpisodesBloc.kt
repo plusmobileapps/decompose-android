@@ -9,6 +9,8 @@ interface EpisodesBloc {
 
     fun onEpisodeClicked(episode: Episode)
 
+    fun loadMore()
+
     data class Model(
         val isLoading: Boolean,
         val episodes: List<Episode>,
