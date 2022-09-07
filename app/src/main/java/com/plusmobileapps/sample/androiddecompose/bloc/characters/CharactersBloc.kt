@@ -1,7 +1,7 @@
 package com.plusmobileapps.sample.androiddecompose.bloc.characters
 
 import com.arkivanov.decompose.value.Value
-import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
+import com.plusmobileapps.rickandmortysdk.characters.RickAndMortyCharacter
 
 interface CharactersBloc {
 

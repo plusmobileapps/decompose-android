@@ -55,6 +55,7 @@ android {
 
 dependencies {
 
+    implementation("com.plusmobileapps:rickandmorty-android:0.1-alpha05")
     implementation(Deps.Jetbrains.coroutines)
     implementation(Deps.Android.coil)
     implementation(Deps.Square.Retrofit.core)

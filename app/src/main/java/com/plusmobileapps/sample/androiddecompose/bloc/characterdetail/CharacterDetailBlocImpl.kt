@@ -5,6 +5,7 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.plusmobileapps.rickandmortysdk.characters.CharactersStore
 import com.plusmobileapps.sample.androiddecompose.data.characters.CharactersRepository
 import com.plusmobileapps.sample.androiddecompose.di.DI
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
@@ -14,7 +15,7 @@ class CharacterDetailBlocImpl(
     componentContext: ComponentContext,
     storeFactory: StoreFactory,
     dispatchers: Dispatchers,
-    repository: CharactersRepository,
+    repository: CharactersStore,
     private val id: Int,
     private val output: (CharacterDetailBloc.Output) -> Unit
 ) : CharacterDetailBloc, ComponentContext by componentContext {
@@ -28,7 +29,7 @@ class CharacterDetailBlocImpl(
         componentContext = context,
         storeFactory = di.storeFactory,
         dispatchers = di.dispatchers,
-        repository = di.charactersRepository,
+        repository = di.rickAndMorty.charactersStore,
         id = id,
         output = output
     )

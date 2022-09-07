@@ -5,16 +5,16 @@ import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.plusmobileapps.rickandmortysdk.characters.CharactersStore
+import com.plusmobileapps.rickandmortysdk.characters.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.bloc.characterdetail.CharacterDetailStore.State
-import com.plusmobileapps.sample.androiddecompose.data.characters.CharactersRepository
-import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
 import com.plusmobileapps.sample.androiddecompose.utils.Dispatchers
 import kotlinx.coroutines.launch
 
 class CharacterDetailStoreProvider(
     private val storeFactory: StoreFactory,
     private val dispatchers: Dispatchers,
-    private val repository: CharactersRepository,
+    private val repository: CharactersStore,
     private val id: Int
 ) {
 

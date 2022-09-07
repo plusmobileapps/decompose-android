@@ -1,6 +1,6 @@
 package com.plusmobileapps.sample.androiddecompose.bloc.characters
 
-import com.plusmobileapps.sample.androiddecompose.data.characters.RickAndMortyCharacter
+import com.plusmobileapps.rickandmortysdk.characters.RickAndMortyCharacter
 
 sealed class CharactersListItem {
     data class Character(val value: RickAndMortyCharacter) : CharactersListItem()

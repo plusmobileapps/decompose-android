@@ -3,6 +3,8 @@ package com.plusmobileapps.sample.androiddecompose.di
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.plusmobileapps.rickandmortysdk.RickAndMorty
+import com.plusmobileapps.rickandmortysdk.RickAndMortySdk
 import com.plusmobileapps.sample.androiddecompose.BuildConfig
 import com.plusmobileapps.sample.androiddecompose.MyApplication
 import com.plusmobileapps.sample.androiddecompose.data.PreferenceDataStore
@@ -21,21 +23,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 interface DI {
-    val database: MyDatabase
+    val rickAndMorty: RickAndMortySdk
     val dispatchers: Dispatchers
     val storeFactory: StoreFactory
     val retrofit: Retrofit
-    val characterService: CharacterService
-    val charactersRepository: CharactersRepository
     val episodeService: EpisodeService
     val episodeRepository: EpisodeRepository
     val preferenceDataStore: PreferenceDataStore
 }
 
 object ServiceLocator : DI {
-
-    override val database: MyDatabase by lazy { createDatabase(MyApplication.context) }
-
+    override val rickAndMorty: RickAndMortySdk by lazy {
+        RickAndMorty.init(MyApplication.context)
+        RickAndMorty.instance
+    }
     override val preferenceDataStore: PreferenceDataStore by lazy {
         PreferenceDataStoreImpl(MyApplication.context)
     }
@@ -52,25 +53,15 @@ object ServiceLocator : DI {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    override val characterService: CharacterService = retrofit.create(CharacterService::class.java)
-
-    override val charactersRepository: CharactersRepository by lazy {
-        CharactersRepositoryImpl(
-            service = characterService,
-            dispatchers = dispatchers,
-            db = database.charactersQueries,
-            preferenceDataStore = preferenceDataStore
-        )
-    }
-
     override val episodeService: EpisodeService by lazy { retrofit.create(EpisodeService::class.java) }
 
     override val episodeRepository: EpisodeRepository by lazy {
-        EpisodeRepositoryImpl(
-            service = episodeService,
-            dispatchers = dispatchers,
-            db = database.episodesQueries,
-            preferenceDataStore = preferenceDataStore
-        )
+        TODO()
+//        EpisodeRepositoryImpl(
+//            service = episodeService,
+//            dispatchers = dispatchers,
+//            db = database.episodesQueries,
+//            preferenceDataStore = preferenceDataStore
+//        )
     }
 }

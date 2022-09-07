@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.plusmobileapps.rickandmortysdk.RickAndMortySdk
 import com.plusmobileapps.sample.androiddecompose.bloc.characters.CharactersStore.Intent
 import com.plusmobileapps.sample.androiddecompose.bloc.characters.CharactersStore.State
 import com.plusmobileapps.sample.androiddecompose.data.characters.CharactersRepository
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 class CharactersStoreProvider(
     private val storeFactory: StoreFactory,
     private val dispatchers: Dispatchers,
-    private val repository: CharactersRepository
+    private val rickAndMorty: RickAndMortySdk
 ) {
 
     private sealed class Message {
@@ -46,7 +47,7 @@ class CharactersStoreProvider(
 
         private fun observeCharacters() {
             scope.launch {
-                repository.getCharacters().collect { characters ->
+                rickAndMorty.charactersStore.getCharacters().collect { characters ->
                     dispatch(Message.CharactersUpdated(characters.map(CharactersListItem::Character)))
                 }
             }
@@ -57,10 +58,10 @@ class CharactersStoreProvider(
             if (state.isLoading || state.isPageLoading) {
                 return
             }
-            val hasMoreToLoad = repository.hasMoreCharactersToLoad
+            val hasMoreToLoad = rickAndMorty.charactersStore.hasMoreCharactersToLoad
             if (hasMoreToLoad) {
                 dispatch(Message.LoadingNextPage(hasMore = hasMoreToLoad))
-                repository.loadNextPage()
+                rickAndMorty.charactersStore.loadNextPage()
             }
         }
     }

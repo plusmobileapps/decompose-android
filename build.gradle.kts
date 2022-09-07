@@ -3,6 +3,7 @@ buildscript {
         gradlePluginPortal()
         google()
         mavenCentral()
+        mavenLocal()
     }
     dependencies {
         classpath(Deps.Jetbrains.kotlinGradlePlugin)
@@ -16,6 +17,7 @@ allprojects {
     repositories {
         mavenCentral()
         google()
+        mavenLocal()
     }
 }
 
